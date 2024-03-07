@@ -17,7 +17,7 @@ const formatTodos = (board: Board) => {
             console.log("MAP: ", map);
             return map;
         },
-        {} as { [ key in TypedColumn ]: number }
+        {} as { [ key in TypedColumn ]: any }
     );
     console.log("flatArrayCounted", flatArray)
 
