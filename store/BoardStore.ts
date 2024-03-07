@@ -59,6 +59,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
        
     )
   },
+  
   deleteTask: async (taskIndex: number, todo: Todo, id: TypedColumn) => {
     const newColumns = new Map(get().board.columns);
 
