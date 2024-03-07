@@ -1,5 +1,5 @@
 "use client";
-
+//client
 import Image from "next/image";
 import TrelloLogo from "@/assets/trello.png";
 import React, { useState, useEffect } from "react";
