@@ -3,6 +3,8 @@
 ### ⭐ Demo ⭐
 - [Live Demo](https://brello.codingleo.com)
 
+<img src="assets/demo.png" width="700"/>
+
 ### Tech Stack
 
 #### Frontend
