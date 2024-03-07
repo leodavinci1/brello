@@ -32,6 +32,7 @@ function Header() {
     const fetchSuggestionFunc = async () => {
       const suggestion = await fetchSuggestion(board);
       const newTodos = suggestion.split("Todos#")[1];
+
       const newTodosArr = newTodos
         .split("|")
         .map((item) => item.replace(/[^a-zA-Z ]/g, ""));
