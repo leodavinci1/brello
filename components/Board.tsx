@@ -10,24 +10,22 @@ function Board() {
     getBoard,
     setBoardState,
     updateTodoInDB,
+    suggestedTodos,
   ] = useBoardStore((state) => [
     state.board,
     state.getBoard,
     state.setBoardState,
     state.updateTodoInDB,
+    state.suggestedTodos,
   ]);
 
   useEffect(() => {
     getBoard();
   }, [getBoard]);
 
-  console.log(board);
-
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
     if (!destination) return;
-
-    //handle column drag
 
     if (type === "column") {
       const entries = Array.from(board.columns.entries());
@@ -45,6 +43,8 @@ function Board() {
     const startColIndex = columns[Number(source.droppableId)];
     const finishColIndex = columns[Number(destination.droppableId)];
 
+    if (!startColIndex || !finishColIndex) return;
+
     const startCol: Column = {
       id: startColIndex[0],
       todos: startColIndex[1].todos,
@@ -55,8 +55,6 @@ function Board() {
       todos: finishColIndex[1].todos,
     };
 
-    console.log(startCol, finishCol);
-
     if (!startCol || !finishCol) return;
 
     if (source.index === destination.index && startCol === finishCol) return;
@@ -65,7 +63,6 @@ function Board() {
     const [todoMoved] = newTodos.splice(source.index, 1);
 
     if (startCol.id === finishCol.id) {
-      //same column drag
       newTodos.splice(destination.index, 0, todoMoved);
       const newCol = {
         id: startCol.id,
@@ -75,7 +72,6 @@ function Board() {
       newColumns.set(startCol.id, newCol);
       setBoardState({ ...board, columns: newColumns });
     } else {
-      //drag to diff column
       const finishTodos = Array.from(finishCol.todos);
       finishTodos.splice(destination.index, 0, todoMoved);
 

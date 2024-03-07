@@ -1,6 +1,6 @@
 import { databases } from  "@/appwrite"
 
-export const getTodosGroupedByColumn = async () => {
+export const getTodosGroupedByColumn = async (suggestedTodos: Array<string>) => {
     const data = await databases.listDocuments(
         process.env.NEXT_PUBLIC_DATABASE_ID!,
         process.env.NEXT_PUBLIC_TODOS_COLLECTION_ID!
@@ -19,6 +19,7 @@ export const getTodosGroupedByColumn = async () => {
             $createdAt: todo.$createdAt,
             title: todo.title,
             status: todo.status,
+            isSuggestion: !!todo.isSuggestion,
             ...(todo.image && {image: JSON.parse(todo.image)})
         })
 

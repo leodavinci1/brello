@@ -5,21 +5,16 @@ const formatTodos = (board: Board) => {
         return map;
     }, {} as { [key in TypedColumn]: Todo[]});
 
-    console.log("flatArray", flatArray)
 
     const flatArrayCounted = Object.entries(flatArray).reduce(
         (map, [key, value]) => {
-            console.log("key: ", key);
-            console.log("value: ", value);
             map[key as TypedColumn] = {count: value.length,
             content: value.length ? value.map((item) => item.title) : null
             };
-            console.log("MAP: ", map);
             return map;
         },
         {} as { [ key in TypedColumn ]: any }
     );
-    console.log("flatArrayCounted", flatArray)
 
     return flatArrayCounted;
 }

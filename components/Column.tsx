@@ -53,12 +53,14 @@ function Column({ id, todos, index }: Props) {
                   {idToColumnText[id]}
                   <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-sm font-normal">
                     {searchString
-                      ? todos.filter((item) =>
-                          item.title
-                            .toLowerCase()
-                            .includes(searchString.toLowerCase())
+                      ? todos.filter(
+                          (item) =>
+                            item.title
+                              .toLowerCase()
+                              .includes(searchString.toLowerCase()) &&
+                            !item.isSuggestion
                         ).length
-                      : todos.length}
+                      : todos.filter((item) => !item.isSuggestion).length}
                   </span>
                 </h2>
                 <div className="space-y-2">
@@ -67,12 +69,22 @@ function Column({ id, todos, index }: Props) {
                       searchString &&
                       !todo.title
                         .toLowerCase()
-                        .includes(searchString.toLowerCase())
+                        .includes(searchString.toLowerCase()) &&
+                      !todo.isSuggestion
                     ) {
                       return null;
                     }
 
-                    return (
+                    return todo.isSuggestion ? (
+                      <TodoCard
+                        todo={todo}
+                        index={index}
+                        id={id}
+                        innerRef={null}
+                        draggableProps={null}
+                        dragHandleProps={null}
+                      />
+                    ) : (
                       <Draggable
                         key={todo.$id}
                         draggableId={todo.$id}
@@ -93,7 +105,10 @@ function Column({ id, todos, index }: Props) {
                   })}
                   {provided.placeholder}
                   <div className="flex items-end justify-end p-2">
-                    <button className="text-green-500 hover:text-green-600">
+                    <button
+                      aria-label={`Add ${idToColumnText[id]}`}
+                      className="text-green-500 hover:text-green-600"
+                    >
                       <PlusCircleIcon
                         onClick={handleAddTodo}
                         className="h-10 w-10"

@@ -3,8 +3,6 @@ import formatTodos from "./formatTodos";
 export const fetchSuggestion = async (board: Board) => {
     const todos = formatTodos(board);
 
-    console.log("todos; ", todos)
-
     const res = await fetch("/api/generateSummary", {
         method: "POST",
         headers: {

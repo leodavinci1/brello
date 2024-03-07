@@ -14,6 +14,7 @@ interface Todo {
     title: string;
     status: string;
     image?: Image;
+    isSuggestion?: Boolean;
 }
 
 interface Image {

@@ -6,16 +6,14 @@ export async function POST (request: Request) {
 
     //communicate to open ai
 
-    // const completion = await openai.chat.completions.create({
-    //     messages: [{ role: "system", content: "When responding, welcome the user always as Mr.Leo and say welcome to the Brello Todo App! Limit the response to 300 characters" },
-    //     { role: "user", content: `Hi there, provide a summary of the following todos. Count how many todos are in each category such as To Do, in progress and done, then tell the user 3 main things he can do so he can quickly finish all To dos but consider these tips being specific for the content of those todos, if there is no To do and no in progress on the list, congratulate the user. Here's the data: ${JSON.stringify(todos)}` }
-    // ],
-    //     model: "gpt-3.5-turbo",
-    //   });
+    const completion = await openai.chat.completions.create({
+        messages: [{ role: "system", content: "When responding Limit the response to 300 characters" },
+        { role: "user", content: `Hi there, suggest new to dos that might be needed (maximum of 2 suggestions and it must be related to the following To Dos: (${JSON.stringify(todos)})). For this part add a string in this format: Todos#{First Todo Suggestion}|{Second Todo Suggestion}` }
+    ],
+        model: "gpt-3.5-turbo",
+      });
 
-    //console.log(completion);
 
-   // return NextResponse.json(completion.choices[0].message);
+   return NextResponse.json(completion.choices[0].message);
 
-   return NextResponse.json("{}");
 }

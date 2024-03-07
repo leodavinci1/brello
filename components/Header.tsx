@@ -9,10 +9,18 @@ import { useBoardStore } from "@/store/BoardStore";
 import { fetchSuggestion } from "@/lib/fetchSuggestion";
 
 function Header() {
-  const [searchString, setSearchString, board] = useBoardStore((state) => [
+  const [
+    searchString,
+    setSearchString,
+    board,
+    setSuggestedTodos,
+    addSuggestionsToBoard,
+  ] = useBoardStore((state) => [
     state.searchString,
     state.setSearchString,
     state.board,
+    state.setSuggestedTodos,
+    state.addSuggestionsToBoard,
   ]);
   const [loading, setLoading] = useState<boolean>(false);
   const [suggestion, setSuggestion] = useState<string>("");
@@ -23,12 +31,20 @@ function Header() {
     setLoading(true);
     const fetchSuggestionFunc = async () => {
       const suggestion = await fetchSuggestion(board);
-      setSuggestion(suggestion);
+      const newTodos = suggestion.split("Todos#")[1];
+      const newTodosArr = newTodos
+        .split("|")
+        .map((item) => item.replace(/[^a-zA-Z ]/g, ""));
+      setSuggestedTodos(newTodosArr);
+      addSuggestionsToBoard();
+      setSuggestion(
+        "Welcome to the Brello Todo App! Check out the AI generated suggestions for new To Dos."
+      );
       setLoading(false);
     };
 
     fetchSuggestionFunc();
-  }, [board]);
+  }, [board.columns.get("todo")]);
 
   return (
     <header>

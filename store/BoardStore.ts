@@ -1,4 +1,5 @@
 import { ID, databases, storage } from '@/appwrite';
+import { addSuggestedTodos } from '@/lib/addSuggestedTodos';
 import { getTodosGroupedByColumn } from '@/lib/getTodosGroupedByColumn';
 import uploadImage from '@/lib/uploadImage';
 import { create } from 'zustand'
@@ -18,11 +19,15 @@ interface BoardState {
     image: File | null;
     setImage: (image: File | null) => void;
     addTask: (todo: string, columnId: TypedColumn, image?: File | null) => void;
+    suggestedTodos: Array<string> | [];
+    setSuggestedTodos: (suggestedTodos: Array<string> | []) => void;
+    addSuggestionsToBoard: () => void;
 }
 
 
 
 export const useBoardStore = create<BoardState>((set, get) => ({
+  suggestedTodos: [],
   image: null,
   setImage: (image: File | null) => set({image}),
   newTaskType: "todo",
@@ -34,9 +39,13 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   setNewTaskInput: (input: string) => set({ newTaskInput: input }),
   searchString: "",
   setSearchString: (searchString) => set({searchString}),
+  setSuggestedTodos: (suggestedTodos) => set({suggestedTodos}),
   getBoard: async () => {
-    const board = await getTodosGroupedByColumn();
+    const board = await getTodosGroupedByColumn(get().suggestedTodos);
     set({ board });
+  },
+  addSuggestionsToBoard: () => {
+    addSuggestedTodos(get().suggestedTodos, get().board);
   },
   updateTodoInDB: async (todo, columnId) => {
     await databases.updateDocument(
